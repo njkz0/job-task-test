@@ -22,13 +22,13 @@ public class Cart extends BaseEntity {
     private User user;
 
     @Column(name = "time")
-    private String time;
+    private Date time;
 
     @Column(name = "status")
     private Status status;
 
     public Cart(User user) {
         this.user=user;
-        time= new Date().toString();
+        time= new Date();
     }
 }

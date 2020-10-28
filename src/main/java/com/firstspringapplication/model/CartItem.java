@@ -1,5 +1,6 @@
 package com.firstspringapplication.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @Data
 @Builder
+@AllArgsConstructor
 
 @Entity
 @Table(name = "cart_items")
@@ -22,14 +24,11 @@ public class CartItem extends BaseEntity{
 
     @ManyToOne (targetEntity = Cart.class)
     private Cart cart;
+
     @Column(name = "amount")
     private Integer amount;
 
-    public CartItem(Item item, Cart cart, int amount){
-        this.cart=  cart;
-        this.item= item;
-        this.amount= amount;
-    }
+
 
 
 }
