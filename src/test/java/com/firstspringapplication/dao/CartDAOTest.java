@@ -8,6 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
+@ActiveProfiles(profiles = {"test"})
 class CartDAOTest {
 
     @Autowired
@@ -40,7 +42,7 @@ class CartDAOTest {
     carts.add(savedCart2);
     }
 
-    @AfterEach
+   // @AfterEach
     void tearDown(){
         carts.stream().forEach(cart -> cartDAO.delete(cart));
         users.stream().forEach(user -> userDAO.delete(user));

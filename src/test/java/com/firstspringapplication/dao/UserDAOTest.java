@@ -44,7 +44,7 @@ class UserDAOTest {
 
     @Test
     void findByLoginAndPassword() {
-        User testUser = userDAO.findByLoginAndPassword("testlogin", "testpassword");
+        User testUser = userDAO.findByLoginAndPassword("testlogin", "testpassword").get(0);
         assertNotNull(testUser);
 
     }

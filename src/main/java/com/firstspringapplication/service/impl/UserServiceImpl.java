@@ -11,14 +11,20 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+
 public class UserServiceImpl implements UserService {
 
+
+    private final UserDAO userDAO;
+
     @Autowired
-   private static UserDAO userDAO;
+    public UserServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
 
     @Override
     public User save(User user) {
-        if (user.getId() == null  && userDAO.findAllByLogin(user.getLogin()).isEmpty()) {
+        if (user.getId() == null && userDAO.findAllByLogin(user.getLogin()).isEmpty()) {
             user.setProfile(Profile.CLIENT);
             return userDAO.save(user);
         }
@@ -29,7 +35,8 @@ public class UserServiceImpl implements UserService {
     public User update(User user) {
         if (user.getId() != null && userDAO.findById(user.getId()) != null) {
             return userDAO.save(user);
-        } throw new RuntimeException("Cannot update excist");
+        }
+        throw new RuntimeException("Cannot update excist");
     }
 
     @Override
@@ -48,12 +55,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findOneByLoginAndPassword(String login, String password) {
-       return userDAO.findByLoginAndPassword(login, password);
+        List<User> users = userDAO.findByLoginAndPassword(login, password);
+        if (users.size() == 1) {
+            return users.get(0);
+        } else throw new RuntimeException("Cant find user");
     }
 
-   
+
     @Override
     public void delete(Integer id) {
-    userDAO.deleteById(id);
+        userDAO.deleteById(id);
     }
 }
