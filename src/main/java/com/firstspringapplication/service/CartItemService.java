@@ -19,4 +19,5 @@ public interface CartItemService {
     CartItem findById(Integer id);
     List<CartItem> findAllCartItemsByCart(Cart cart);
     void deleteById(Integer id);
+    Integer getCartPrice(Cart cart);
 }

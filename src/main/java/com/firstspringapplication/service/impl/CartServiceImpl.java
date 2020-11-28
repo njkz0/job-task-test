@@ -8,6 +8,7 @@ import com.firstspringapplication.service.CartService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,5 +52,13 @@ public class CartServiceImpl implements CartService {
     @Override
     public void deleteById(Integer id) {
         cartDAO.deleteById(id);
+    }
+
+    @Override
+    public List<Cart> getCartsBetweenDate(Integer id, Date fromDate, Date toDate) {
+        List<Cart> carts = cartDAO.findCartBetweenDates(id, fromDate, toDate);
+        if(!carts.isEmpty()){
+            return carts;
+        } throw new RuntimeException("cant find carts between selected dates");
     }
 }

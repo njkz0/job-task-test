@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/user")
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class UserController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<User> findAllUsers(){
+    public ResponseEntity <List<User>> findAllUsers(){
         return new ResponseEntity(userService.findAll(), HttpStatus.OK);
     }
 
@@ -41,7 +43,7 @@ public class UserController {
     public ResponseEntity<User> updateUser(@RequestBody User user) {
         try {
             User changeUser = userService.update(user);
-            return new ResponseEntity<User>(changeUser, HttpStatus.OK);
+            return new ResponseEntity<>(changeUser, HttpStatus.OK);
         } catch (RuntimeException e){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

@@ -1,5 +1,6 @@
 package com.firstspringapplication.controller;
 
+import com.firstspringapplication.controller.request.CartItemTotalAmountDTO;
 import com.firstspringapplication.model.Cart;
 import com.firstspringapplication.model.CartItem;
 import com.firstspringapplication.model.User;
@@ -9,6 +10,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/cart_item")
@@ -34,7 +37,7 @@ public class CartItemController {
     }
 
     @PostMapping("/all")
-    public ResponseEntity<CartItem> findAllCartItemsByCart(@RequestBody Cart cart){
+    public ResponseEntity <List<CartItem>> findAllCartItemsByCart(@RequestBody Cart cart){
         return new ResponseEntity(cartItemService.findAllCartItemsByCart(cart), HttpStatus.OK);
     }
 
@@ -49,9 +52,17 @@ public class CartItemController {
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<CartItem> delete(@PathVariable Integer id){
+    public ResponseEntity<CartItem> delete(@PathVariable Integer id){
         cartItemService.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/cart_amount")
+    public ResponseEntity <CartItemTotalAmountDTO> getTotalAmountFromCart(Cart cart){
+        Integer result = cartItemService.getCartPrice(cart);
+        CartItemTotalAmountDTO resultDTO = new CartItemTotalAmountDTO();
+        resultDTO.setTotalAmount(result);
+        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
     }
 
 }

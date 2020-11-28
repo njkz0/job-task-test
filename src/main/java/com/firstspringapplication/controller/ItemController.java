@@ -8,6 +8,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/item")
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class ItemController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<Item> findAllItems(){
+    public ResponseEntity <List<Item>> findAllItems(){
         return new ResponseEntity(itemService.findAllItems(), HttpStatus.OK);
     }
 
@@ -40,7 +42,7 @@ public class ItemController {
     public ResponseEntity<Item> updateItem(@RequestBody Item item) {
         try {
             Item changeItem = itemService.update(item);
-            return new ResponseEntity<Item>(changeItem, HttpStatus.OK);
+            return new ResponseEntity<>(changeItem, HttpStatus.OK);
         } catch (RuntimeException e){
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }

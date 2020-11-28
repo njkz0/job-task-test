@@ -51,4 +51,14 @@ public class CartItemServiceImpl implements CartItemService {
     public void deleteById(Integer id) {
         cartItemDAO.deleteById(id);
     }
+
+    @Override
+    public Integer getCartPrice(Cart cart) {
+        List <CartItem> cartItems = cartItemDAO.findAllByCart(cart);
+        Integer result=0;
+        for (CartItem cartItem: cartItems){
+            result += cartItem.getItem().getPrice()*cartItem.getAmount();
+        }
+        return result;
+    }
 }

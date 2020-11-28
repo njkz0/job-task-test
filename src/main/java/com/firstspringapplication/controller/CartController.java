@@ -1,5 +1,6 @@
 package com.firstspringapplication.controller;
 
+import com.firstspringapplication.controller.request.ListCartRequestDTO;
 import com.firstspringapplication.model.Cart;
 import com.firstspringapplication.model.Item;
 import com.firstspringapplication.model.User;
@@ -9,6 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Date;
+import java.util.List;
 
 @Controller
 @RequestMapping("/cart")
@@ -34,8 +38,8 @@ public class CartController {
     }
 
     @PostMapping("/all_carts")
-    public ResponseEntity<Cart> findAllCartsByUser(@RequestBody User user){
-        return new ResponseEntity(cartService.findAllCartsByUser(user), HttpStatus.OK);
+    public ResponseEntity<List<Cart>> findAllCartsByUser(@RequestBody User user) {
+        return new ResponseEntity<>(cartService.findAllCartsByUser(user), HttpStatus.OK);
     }
 
     @PutMapping
@@ -43,14 +47,24 @@ public class CartController {
         try {
             Cart changeCart = cartService.update(cart);
             return new ResponseEntity<>(changeCart, HttpStatus.OK);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/{id}")
-    ResponseEntity<Cart> delete(@PathVariable Integer id){
+    ResponseEntity delete(@PathVariable Integer id) {
         cartService.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @GetMapping("/find_between_dates")
+    public ResponseEntity<List<Cart>> findBetweenDates(@RequestBody ListCartRequestDTO listCartRequestDTO) {
+        try {
+            List<Cart> cartList = cartService.getCartsBetweenDate(listCartRequestDTO.getId(), listCartRequestDTO.getDateFrom(), listCartRequestDTO.getDateTo());
+            return new ResponseEntity<>(cartList, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
 }
