@@ -17,7 +17,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item save(Item item) {
-        if (itemDAO.findById(item.getId()) == null) {
+        if (item.getId() == null && itemDAO.findByName(item.getName()) == null) {
             return itemDAO.save(item);
         }
         throw new RuntimeException("Cant save item");
@@ -25,7 +25,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public Item update(Item item) {
-        if (itemDAO.findById(item.getId()) != null && item.getId() != null) {
+        if (itemDAO.findById(item.getId()).isPresent() && item.getId() != null) {
             return itemDAO.save(item);
         }
         throw new RuntimeException("Cant update item");
@@ -34,13 +34,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Item findById(Integer id) {
         Optional<Item> item = itemDAO.findById(id);
-        if (item != null) {
-            return item.get();
-        } else return null;
+        return item.orElse(null);
     }
 
     @Override
-    public List<Item> findAllItems(){
+    public List<Item> findAllItems() {
         return itemDAO.findAll();
     }
 

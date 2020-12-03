@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -37,7 +38,7 @@ public class CartItemController {
     }
 
     @PostMapping("/all")
-    public ResponseEntity <List<CartItem>> findAllCartItemsByCart(@RequestBody Cart cart){
+    public ResponseEntity<List<CartItem>> findAllCartItemsByCart(@RequestBody Cart cart) {
         return new ResponseEntity(cartItemService.findAllCartItemsByCart(cart), HttpStatus.OK);
     }
 
@@ -46,23 +47,33 @@ public class CartItemController {
         try {
             CartItem changeCartItem = cartItemService.update(cartItem);
             return new ResponseEntity<>(changeCartItem, HttpStatus.OK);
-        } catch (RuntimeException e){
+        } catch (RuntimeException e) {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<CartItem> delete(@PathVariable Integer id){
+    public ResponseEntity<CartItem> delete(@PathVariable Integer id) {
         cartItemService.deleteById(id);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @GetMapping("/cart_amount")
-    public ResponseEntity <CartItemTotalAmountDTO> getTotalAmountFromCart(Cart cart){
-        Integer result = cartItemService.getCartPrice(cart);
+    public ResponseEntity<CartItemTotalAmountDTO> getTotalAmountFromCart(Cart cart) {
+        Integer result = cartItemService.getCartPrice(cart.getId());
         CartItemTotalAmountDTO resultDTO = new CartItemTotalAmountDTO();
         resultDTO.setTotalAmount(result);
         return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    }
+
+    @GetMapping("/total_sum")
+    public ResponseEntity<Integer> findTotalSum(Integer userID, Date dateFrom, Date dateTo) {
+        try {
+            Integer result = cartItemService.findTotalSum(userID, dateFrom, dateTo);
+            return new ResponseEntity<>(result, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
     }
 
 }

@@ -21,7 +21,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart save(Cart cart) {
-        if (cartDAO.findById(cart.getId()) == null) {
+        if (cartDAO.findById(cart.getId()).isEmpty()) {
             cart.setStatus(Status.OPEN);
             return cartDAO.save(cart);
         }
@@ -30,7 +30,7 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart update(Cart cart) {
-        if (cartDAO.findById(cart.getId()) != null && cart.getId() != null) {
+        if (cartDAO.findById(cart.getId()).isPresent() && cart.getId() != null) {
             return cartDAO.save(cart);
         }
         throw new RuntimeException("Cant update Cart");
@@ -39,9 +39,7 @@ public class CartServiceImpl implements CartService {
     @Override
     public Cart findById(Integer id) {
         Optional<Cart> cart = cartDAO.findById(id);
-        if (cart != null) {
-            return cart.get();
-        } else return null;
+        return cart.orElse(null);
     }
 
     @Override
@@ -57,8 +55,8 @@ public class CartServiceImpl implements CartService {
     @Override
     public List<Cart> getCartsBetweenDate(Integer id, Date fromDate, Date toDate) {
         List<Cart> carts = cartDAO.findCartBetweenDates(id, fromDate, toDate);
-        if(!carts.isEmpty()){
-            return carts;
-        } throw new RuntimeException("cant find carts between selected dates");
+        if (!carts.isEmpty()) return carts;
+
+        throw new RuntimeException("cant find carts between selected dates");
     }
 }

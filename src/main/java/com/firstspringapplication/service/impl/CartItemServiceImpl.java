@@ -5,9 +5,9 @@ import com.firstspringapplication.model.Cart;
 import com.firstspringapplication.model.CartItem;
 import com.firstspringapplication.service.CartItemService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +20,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItem save(CartItem cartItem) {
-        if (cartItemDAO.findById(cartItem.getId()) == null) {
+        if (cartItemDAO.findById(cartItem.getId()).isEmpty()) {
             return cartItemDAO.save(cartItem);
         }
         throw new RuntimeException("Cant save CartItem");
@@ -28,7 +28,7 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItem update(CartItem cartItem) {
-        if (cartItemDAO.findById(cartItem.getId()) != null && cartItem.getId() != null) {
+        if (cartItemDAO.findById(cartItem.getId()).isPresent() && cartItem.getId() != null) {
             return cartItemDAO.save(cartItem);
         }
         throw new RuntimeException("Cant update CartItem");
@@ -37,9 +37,7 @@ public class CartItemServiceImpl implements CartItemService {
     @Override
     public CartItem findById(Integer id) {
         Optional<CartItem> cartItem = cartItemDAO.findById(id);
-        if (cartItem != null) {
-            return cartItem.get();
-        } else return null;
+        return cartItem.orElseThrow(null);
     }
 
     @Override
@@ -53,12 +51,20 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public Integer getCartPrice(Cart cart) {
-        List <CartItem> cartItems = cartItemDAO.findAllByCart(cart);
-        Integer result=0;
-        for (CartItem cartItem: cartItems){
-            result += cartItem.getItem().getPrice()*cartItem.getAmount();
+    public Integer getCartPrice(Integer cartID) {
+       return cartItemDAO.findSumOfCart(cartID);
+       // var cartItems = cartItemDAO.findAllByCart(cart);
+       // var result = 0;
+       // for (CartItem cartItem : cartItems) result += cartItem.getItem().getPrice() * cartItem.getAmount();
+       // return result;
+    }
+
+    @Override
+    public Integer findTotalSum(Integer userID, Date dateFrom, Date dateTo) {
+        Integer result = cartItemDAO.findTotalSum(userID, dateFrom, dateTo);
+        if (result != null) {
+            return result;
         }
-        return result;
+        throw new RuntimeException("Items in that period not found");
     }
 }

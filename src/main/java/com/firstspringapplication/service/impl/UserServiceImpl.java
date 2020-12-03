@@ -4,6 +4,7 @@ import com.firstspringapplication.dao.UserDAO;
 import com.firstspringapplication.model.Profile;
 import com.firstspringapplication.model.User;
 import com.firstspringapplication.service.UserService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -11,16 +12,11 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
 
 
     private final UserDAO userDAO;
-
-    @Autowired
-    public UserServiceImpl(UserDAO userDAO) {
-        this.userDAO = userDAO;
-    }
 
     @Override
     public User save(User user) {
@@ -33,18 +29,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User update(User user) {
-        if (user.getId() != null && userDAO.findById(user.getId()) != null) {
+        if (user.getId() != null && userDAO.findById(user.getId()).isPresent()) {
             return userDAO.save(user);
         }
-        throw new RuntimeException("Cannot update excist");
+        throw new RuntimeException("Cannot update user");
     }
 
     @Override
     public User findOne(Integer id) {
         Optional<User> user = userDAO.findById(id);
-        if (user.isPresent()) {
-            return user.get();
-        } else return null;
+        return user.orElse(null);
 
     }
 

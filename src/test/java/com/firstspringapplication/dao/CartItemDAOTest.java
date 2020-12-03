@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,17 +28,25 @@ class CartItemDAOTest {
     @Autowired
     ItemDAO itemDAO;
 
-    List<Cart> carts = new ArrayList<>();
+
     List<CartItem> cartItems = new ArrayList<>();
+    List <Date> dates = new ArrayList<>();
+    User user;
+    Cart cart;
 
     @BeforeEach
     void setUp() {
         User userTest = new User("test1", "test1", "test1", "test1", Profile.CLIENT);
-        User savedUser = userDAO.save(userTest);
+        user = userDAO.save(userTest);
 
-        Cart cartTest1 = new Cart(savedUser);
-        Cart savedCart1 = cartDAO.save(cartTest1);
-        carts.add(savedCart1);
+        Date dateTo = new Date();
+        Date dateFrom= new Date(1l);
+        dates.add(dateFrom);
+        dates.add(dateTo);
+
+        Cart cartTest1 = new Cart(user);
+        cart = cartDAO.save(cartTest1);
+
 
         Item testItem1 = new Item("testItem1", 1000);
         Item savedItem1 = itemDAO.save(testItem1);
@@ -45,26 +54,33 @@ class CartItemDAOTest {
         Item testItem2 = new Item("testItem2", 2000);
         Item savedItem2 = itemDAO.save(testItem2);
 
-        CartItem cartItemTest1 = new CartItem(savedItem1, savedCart1, 1);
-        CartItem cartItemTest2 = new CartItem(savedItem2, savedCart1, 1);
+        CartItem cartItemTest1 = new CartItem(savedItem1, cart, 1);
+        CartItem cartItemTest2 = new CartItem(savedItem2, cart, 2);
         CartItem savedCartItem1 = cartItemDAO.save(cartItemTest1);
         CartItem savedCartItem2 = cartItemDAO.save(cartItemTest2);
         cartItems.add(savedCartItem1);
         cartItems.add(savedCartItem2);
     }
 
-    @AfterEach
-    void tearDown() {
-        cartItems.stream().forEach(cartItem -> cartItemDAO.delete(cartItem));
-        carts.stream().forEach(cart -> cartDAO.delete(cart));
-    }
 
     @Test
     void findAllByCart() {
-        List<CartItem> testList = cartItemDAO.findAllByCart(carts.get(0));
+        List<CartItem> testList = cartItemDAO.findAllByCart(cart);
         assertEquals(2, testList.size());
-        for (int i = 0; i < testList.size(); i++) {
-            assertEquals(carts.get(0).getTime(), testList.get(i).getCart().getTime());
+        for (CartItem cartItem : testList) {
+            assertEquals(cart.getTime(), cartItem.getCart().getTime());
         }
+    }
+
+    @Test
+    void findTotalSum() {
+       Integer result = cartItemDAO.findTotalSum(user.getId(), dates.get(0), dates.get(1));
+       assertEquals(5000, result);
+    }
+
+    @Test
+    void findSumOfCart() {
+        Integer result = cartItemDAO.findSumOfCart(cart.getId());
+        assertEquals(5000, result);
     }
 }
