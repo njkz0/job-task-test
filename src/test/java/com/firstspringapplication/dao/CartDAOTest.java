@@ -63,7 +63,7 @@ class CartDAOTest {
 
     @Test
     void findAllByUser() {
-        List <Cart> testCarts = cartDAO.findAllByUser(users.get(0));
+        List <Cart> testCarts = cartDAO.findAllByUserId(users.get(0).getId());
         assertEquals(2, testCarts.size());
         assertEquals(carts.get(0).getUser().getFirstName(), testCarts.get(0).getUser().getFirstName());
 

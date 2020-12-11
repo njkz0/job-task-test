@@ -12,7 +12,7 @@ public interface CartService {
      Cart save(Cart cart);
      Cart update(Cart cart);
      Cart findById(Integer id);
-     List<Cart> findAllCartsByUser(User user);
+     List<Cart> findAllCartsByUserId(Integer userId);
      void deleteById(Integer id);
      List <Cart> getCartsBetweenDate(Integer id, Date fromDate, Date toDate);
 }

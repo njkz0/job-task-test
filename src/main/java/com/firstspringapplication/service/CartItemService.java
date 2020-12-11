@@ -18,8 +18,8 @@ public interface CartItemService {
     CartItem save(CartItem cartItem);
     CartItem update(CartItem cartItem);
     CartItem findById(Integer id);
-    List<CartItem> findAllCartItemsByCart(Cart cart);
+    List<CartItem> findAllCartItemsByCartId(Integer cartId);
     void deleteById(Integer id);
-    Integer getCartPrice(Integer cartID);
+    Integer getCartPrice(Integer cartId);
     Integer findTotalSum(Integer userID, Date dateFrom, Date dateTo);
 }

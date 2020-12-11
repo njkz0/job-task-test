@@ -1,6 +1,7 @@
 package com.firstspringapplication.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -12,6 +13,7 @@ import javax.persistence.Table;
 @AllArgsConstructor
 @Data
 @Entity
+@Builder
 public class User extends  BaseEntity {
     private String login;
     private String password;

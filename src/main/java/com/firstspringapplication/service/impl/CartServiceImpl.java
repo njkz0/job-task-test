@@ -21,11 +21,22 @@ public class CartServiceImpl implements CartService {
 
     @Override
     public Cart save(Cart cart) {
-        if (cartDAO.findById(cart.getId()).isEmpty()) {
-            cart.setStatus(Status.OPEN);
+        List<Cart> carts = cartDAO.findAllByUserId(cart.getUser().getId());
+        if (cart.getId() == null && carts.isEmpty()) {
             return cartDAO.save(cart);
+        } else if (cart.getId() == null &&!carts.isEmpty()) {
+            boolean userHaveNotOpenCart = true;
+            for (var i : carts) {
+                if (i.getStatus() == Status.OPEN) {
+                    userHaveNotOpenCart = false;
+                    break;
+                }
+            }
+            if (userHaveNotOpenCart) return cartDAO.save(cart);
+            else throw new RuntimeException("User already have open cart");
+
         }
-        throw new RuntimeException("Cant save Cart");
+        throw new RuntimeException("Cant save user");
     }
 
     @Override
@@ -43,8 +54,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Cart> findAllCartsByUser(User user) {
-        return cartDAO.findAllByUser(user);
+    public List<Cart> findAllCartsByUserId(Integer userId) {
+        return cartDAO.findAllByUserId(userId);
     }
 
     @Override
@@ -53,8 +64,8 @@ public class CartServiceImpl implements CartService {
     }
 
     @Override
-    public List<Cart> getCartsBetweenDate(Integer id, Date fromDate, Date toDate) {
-        List<Cart> carts = cartDAO.findCartBetweenDates(id, fromDate, toDate);
+    public List<Cart> getCartsBetweenDate(Integer userId, Date fromDate, Date toDate) {
+        List<Cart> carts = cartDAO.findCartBetweenDates(userId, fromDate, toDate);
         if (!carts.isEmpty()) return carts;
 
         throw new RuntimeException("cant find carts between selected dates");

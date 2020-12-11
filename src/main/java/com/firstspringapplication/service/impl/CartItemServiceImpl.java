@@ -1,7 +1,6 @@
 package com.firstspringapplication.service.impl;
 
 import com.firstspringapplication.dao.CartItemDAO;
-import com.firstspringapplication.model.Cart;
 import com.firstspringapplication.model.CartItem;
 import com.firstspringapplication.service.CartItemService;
 import lombok.RequiredArgsConstructor;
@@ -20,10 +19,13 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public CartItem save(CartItem cartItem) {
-        if (cartItemDAO.findById(cartItem.getId()).isEmpty()) {
-            return cartItemDAO.save(cartItem);
+        List<CartItem> cartItems = cartItemDAO.findAllByCartId(cartItem.getCart().getId());
+        for (var i : cartItems) {
+            if (cartItem.getItem().getId().equals(i.getItem().getId())) {
+                throw new RuntimeException("CartItem in that cart is already exsist");
+            }
         }
-        throw new RuntimeException("Cant save CartItem");
+        return cartItemDAO.save(cartItem);
     }
 
     @Override
@@ -41,8 +43,8 @@ public class CartItemServiceImpl implements CartItemService {
     }
 
     @Override
-    public List<CartItem> findAllCartItemsByCart(Cart cart) {
-        return cartItemDAO.findAllByCart(cart);
+    public List<CartItem> findAllCartItemsByCartId(Integer cartId) {
+        return cartItemDAO.findAllByCartId(cartId);
     }
 
     @Override
@@ -52,11 +54,9 @@ public class CartItemServiceImpl implements CartItemService {
 
     @Override
     public Integer getCartPrice(Integer cartID) {
-       return cartItemDAO.findSumOfCart(cartID);
-       // var cartItems = cartItemDAO.findAllByCart(cart);
-       // var result = 0;
-       // for (CartItem cartItem : cartItems) result += cartItem.getItem().getPrice() * cartItem.getAmount();
-       // return result;
+        Integer result = cartItemDAO.findSumOfCart(cartID);
+        if (result != null) return result;
+        throw new RuntimeException("Items in that cart not found");
     }
 
     @Override

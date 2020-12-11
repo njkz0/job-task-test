@@ -12,7 +12,7 @@ import java.util.List;
 @Repository
 public interface CartItemDAO extends JpaRepository<CartItem, Integer> {
 
-    List<CartItem> findAllByCart(Cart cart);
+    List<CartItem> findAllByCartId(Integer cartID);
 
     @Query(nativeQuery = true,
             value = "" +
@@ -28,10 +28,11 @@ public interface CartItemDAO extends JpaRepository<CartItem, Integer> {
 
     @Query(nativeQuery = true,
             value = "SELECT SUM(r.it_price * r.it_amount) FROM " +
-                            "(SELECT i.price AS it_price, ci.amount AS it_amount " +
-                            "FROM cart_items ci " +
-                            "JOIN items i ON ci.item_id = i.id" +
-                            "WHERE ci.cart_id = :cartID ) AS r")
+                    "(SELECT ci.amount AS it_amount, i.price AS it_price " +
+                    "FROM cart_items ci " +
+                    "JOIN items i ON ci.item_id = i.id " +
+                    "WHERE ci.cart_id = :cartID)" +
+                    "AS r")
     Integer findSumOfCart(Integer cartID);
 }
 

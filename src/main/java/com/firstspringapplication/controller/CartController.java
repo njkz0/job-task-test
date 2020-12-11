@@ -2,7 +2,6 @@ package com.firstspringapplication.controller;
 
 import com.firstspringapplication.controller.request.ListCartRequestDTO;
 import com.firstspringapplication.model.Cart;
-import com.firstspringapplication.model.Item;
 import com.firstspringapplication.model.User;
 import com.firstspringapplication.service.CartService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -32,18 +30,18 @@ public class CartController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Cart> getOneItemById(@PathVariable Integer id) {
+    public ResponseEntity<Cart> getOneCartById(@PathVariable Integer id) {
         Cart foundCart = cartService.findById(id);
         return new ResponseEntity<>(foundCart, HttpStatus.OK);
     }
 
-    @PostMapping("/all_carts")
+    @GetMapping("/all_carts")
     public ResponseEntity<List<Cart>> findAllCartsByUser(@RequestBody User user) {
-        return new ResponseEntity<>(cartService.findAllCartsByUser(user), HttpStatus.OK);
+        return new ResponseEntity<>(cartService.findAllCartsByUserId(user.getId()), HttpStatus.OK);
     }
 
     @PutMapping
-    public ResponseEntity<Cart> updateItem(@RequestBody Cart cart) {
+    public ResponseEntity<Cart> updateCart(@RequestBody Cart cart) {
         try {
             Cart changeCart = cartService.update(cart);
             return new ResponseEntity<>(changeCart, HttpStatus.OK);

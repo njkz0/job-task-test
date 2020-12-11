@@ -39,7 +39,7 @@ public class CartItemController {
 
     @PostMapping("/all")
     public ResponseEntity<List<CartItem>> findAllCartItemsByCart(@RequestBody Cart cart) {
-        return new ResponseEntity(cartItemService.findAllCartItemsByCart(cart), HttpStatus.OK);
+        return new ResponseEntity(cartItemService.findAllCartItemsByCartId(cart.getId()), HttpStatus.OK);
     }
 
     @PutMapping
@@ -58,12 +58,16 @@ public class CartItemController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @GetMapping("/cart_amount")
-    public ResponseEntity<CartItemTotalAmountDTO> getTotalAmountFromCart(Cart cart) {
-        Integer result = cartItemService.getCartPrice(cart.getId());
-        CartItemTotalAmountDTO resultDTO = new CartItemTotalAmountDTO();
-        resultDTO.setTotalAmount(result);
-        return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+    @GetMapping("/cart_sum")
+    public ResponseEntity<CartItemTotalAmountDTO> getTotalSumFromCart(Cart cart) {
+        try {
+            Integer result = cartItemService.getCartPrice(cart.getId());
+            CartItemTotalAmountDTO resultDTO = new CartItemTotalAmountDTO();
+            resultDTO.setTotalAmount(result);
+            return new ResponseEntity<>(resultDTO, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity(HttpStatus.OK);
+        }
     }
 
     @GetMapping("/total_sum")

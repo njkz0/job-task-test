@@ -40,7 +40,7 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<User> updateUser(@RequestBody User user) {
+    public ResponseEntity updateUser(@RequestBody User user) {
         try {
             User changeUser = userService.update(user);
             return new ResponseEntity<>(changeUser, HttpStatus.OK);

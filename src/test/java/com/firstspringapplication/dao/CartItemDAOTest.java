@@ -65,7 +65,7 @@ class CartItemDAOTest {
 
     @Test
     void findAllByCart() {
-        List<CartItem> testList = cartItemDAO.findAllByCart(cart);
+        List<CartItem> testList = cartItemDAO.findAllByCartId(cart.getId());
         assertEquals(2, testList.size());
         for (CartItem cartItem : testList) {
             assertEquals(cart.getTime(), cartItem.getCart().getTime());
