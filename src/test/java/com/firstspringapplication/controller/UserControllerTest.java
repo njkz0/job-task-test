@@ -1,6 +1,6 @@
 package com.firstspringapplication.controller;
 
-import com.firstspringapplication.model.Profile;
+
 import com.firstspringapplication.model.User;
 import com.firstspringapplication.service.UserService;
 import org.junit.jupiter.api.Test;
@@ -37,7 +37,6 @@ class UserControllerTest {
         User testUser = new User();
         testUser.setLogin("test_login");
         testUser.setPassword("test_pass");
-        testUser.setProfile(Profile.CLIENT);
 
         when(userService.save(any(User.class))).thenReturn(testUser);
 
@@ -57,7 +56,6 @@ class UserControllerTest {
                 User.builder()
                         .login("test_login")
                         .password("test_pass")
-                        .profile(Profile.CLIENT)
                         .build(),
                 HttpMethod.POST, new URI("/user"));
         ResponseEntity<User> responseEntity = testRestTemplate.exchange(requestEntity, User.class);

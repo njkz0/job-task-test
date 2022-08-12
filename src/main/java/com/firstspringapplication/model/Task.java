@@ -6,18 +6,21 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import java.util.Date;
 
-@Table (name = "users")
+@Table(name = "tasks")
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
 @Entity
 @Builder
-public class User extends  BaseEntity {
-    private String login;
-    private String password;
-    private String firstName;
-    private String lastName;
+public class Task extends BaseEntity{
+    private Date createDate;
+    private String description;
+    private Status status;
+    @ManyToOne(targetEntity = User.class)
+    private User creator;
 
 }

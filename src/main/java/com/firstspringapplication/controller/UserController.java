@@ -54,4 +54,14 @@ public class UserController {
         userService.delete(id);
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @PostMapping("/sign-in")
+    public ResponseEntity<User> signIn(@RequestBody String login, String password) {
+        try {
+            User newUser = userService.findOneByLoginAndPassword(login, password);
+            return new ResponseEntity<>(newUser, HttpStatus.OK);
+        } catch (RuntimeException e) {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

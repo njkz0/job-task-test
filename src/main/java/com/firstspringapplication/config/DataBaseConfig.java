@@ -13,7 +13,6 @@ public class DataBaseConfig {
 
     @Bean
     @Profile("prod")
-        // @Qualifier("dbprod")
     DataSource dataSourceProd() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.url("jdbc:postgresql://localhost:5432/first_spring");
@@ -24,7 +23,6 @@ public class DataBaseConfig {
 
     @Bean
     @Profile("test")
-        // @Qualifier("dbtest")
     DataSource dataSourceTest() {
         DataSourceBuilder dataSourceBuilder = DataSourceBuilder.create();
         dataSourceBuilder.url("jdbc:postgresql://localhost:5432/first_spring_test");

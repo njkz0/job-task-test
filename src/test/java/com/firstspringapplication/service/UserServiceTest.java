@@ -1,7 +1,7 @@
 package com.firstspringapplication.service;
 
 import com.firstspringapplication.dao.UserDAO;
-import com.firstspringapplication.model.Profile;
+
 import com.firstspringapplication.model.User;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +31,6 @@ class UserServiceTest {
         User expectedUser = new User();
         expectedUser.setId(1);
         expectedUser.setLogin("test_login");
-        expectedUser.setProfile(Profile.CLIENT);
 
         User testUser = new User();
         testUser.setLogin("test_login");
@@ -41,7 +40,6 @@ class UserServiceTest {
 
         User user = userService.save(testUser);
 
-        assertEquals(Profile.CLIENT, user.getProfile());
 
         verify(userDAO).findAllByLogin(anyString());
         verify(userDAO).save(any(User.class));

@@ -1,7 +1,6 @@
 package com.firstspringapplication.service.impl;
 
 import com.firstspringapplication.dao.UserDAO;
-import com.firstspringapplication.model.Profile;
 import com.firstspringapplication.model.User;
 import com.firstspringapplication.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +20,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public User save(User user) {
         if (user.getId() == null && userDAO.findAllByLogin(user.getLogin()).isEmpty()) {
-            user.setProfile(Profile.CLIENT);
             return userDAO.save(user);
         }
         throw new RuntimeException("User already excist");

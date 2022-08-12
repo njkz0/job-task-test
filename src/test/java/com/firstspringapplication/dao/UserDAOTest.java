@@ -1,6 +1,4 @@
 package com.firstspringapplication.dao;
-
-import com.firstspringapplication.model.Profile;
 import com.firstspringapplication.model.User;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,9 +21,9 @@ class UserDAOTest {
 
     @BeforeEach
     void setUp(){
-        User userTest1 = new User("testlogin", "testpassword", "test1", "test1", Profile.CLIENT);
+        User userTest1 = new User("testlogin", "testpassword", "test1", "test1");
         User savedUser1 = userDAO.save(userTest1);
-        User userTest2 = new User("testlogin", "testpassword2", "test1", "test2", Profile.CLIENT);
+        User userTest2 = new User("testlogin", "testpassword2", "test1", "test2");
         User savedUser2 = userDAO.save(userTest2);
         users.add(savedUser1);
         users.add(savedUser2);
